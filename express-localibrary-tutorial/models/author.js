@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const {DateTime} = require('luxon');
 const Schema = mongoose.Schema;
 
 const AuthorSchema = new Schema(
@@ -8,6 +8,7 @@ const AuthorSchema = new Schema(
     family_name: {type: String, required: true, maxLength: 100},
     date_of_birth: {type: Date},
     date_of_death: {type: Date},
+    
   }
 );
 
@@ -26,6 +27,26 @@ AuthorSchema
     }
     return fullname;
   });
+
+//Virtual for author life span
+AuthorSchema
+  .virtual('lifespan')
+  .get(function(){
+  
+    // Attempt 1
+    let lifespan;
+    // Calculate lifespan if the person has died
+    if (this.date_of_birth && this.date_of_death){
+      lifespan =  `${this.date_of_birth} - ${this.date_of_death}`
+    }
+
+    //Calculate lifespan if the person hasn't died
+    if(!this.date_of_death) {
+      lifespan = `${this.date_of_birth} - `;
+    }
+    return lifespan;
+  });
+
 
 // Virtual for author's URL
 AuthorSchema
