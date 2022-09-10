@@ -23,7 +23,7 @@ const mongoDB = 'mongodb+srv://tcheng789:mongo1@cluster0.23jlw1k.mongodb.net/?re
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 
 // view engine setup
